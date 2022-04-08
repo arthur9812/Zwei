@@ -172,8 +172,8 @@ class NetworkEnv:
         _last_packet_len = video_quality % MTU_PACKET_SIZE
         if _last_packet_len > 0:
             _packet_count += 1
-        _temp = np.random.randint(0, int(timeslot), _packet_count)
-        _d_ms_array = _temp[np.argsort(_temp)] + self.simtime
+        _temp = np.random.randint(0, int(timeslot), _packet_count)  # 产生随机packet_count个时间点
+        _d_ms_array = _temp[np.argsort(_temp)] + self.simtime  # 用于模拟包发出时刻？
 
         for _t in range(len(_d_ms_array) - 1):
             self.delay_queue.write(MTU_PACKET_SIZE, _d_ms_array[_t])
@@ -216,6 +216,10 @@ class NetworkEnv:
                     #np.random.uniform(NOISE_LOW, NOISE_HIGH)
 
             #loss += self.base_loss
+
+            # print( timeslot / 1000.0, loss, \
+            #     packet_payload, \
+            #     queuing_delay, _real_packet_payload, _limbo_bytes_len)
 
             return timeslot / 1000.0, loss, \
                 packet_payload, \

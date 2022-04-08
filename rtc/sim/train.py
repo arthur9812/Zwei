@@ -10,13 +10,13 @@ import rules
 import itertools
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
 
 S_DIM = [6, 8]
 A_DIM = 7
 ACTOR_LR_RATE =1e-4
 CRITIC_LR_RATE = 1e-3
-NUM_AGENTS = 25
+NUM_AGENTS = 1  # 25
 TRAIN_SEQ_LEN = 60  # take as a train batch
 TRAIN_EPOCH = 1000000
 MODEL_SAVE_INTERVAL = 150
@@ -75,8 +75,9 @@ def central_agent(net_params_queues, exp_queues):
                 # Save the neural net parameters to disk.
                 save_path = saver.save(sess, SUMMARY_DIR + "/nn_model_ep_" +
                                        str(epoch) + ".ckpt")
-                os.system('python test.py ' + SUMMARY_DIR +
-                            '/nn_model_ep_' + str(epoch) + '.ckpt ' + str(epoch) + '&')
+                print("Saved model nn_model_ep_%d.ckpt" %epoch)
+                # os.system('python test.py ' + SUMMARY_DIR +
+                #             '/nn_model_ep_' + str(epoch) + '.ckpt ' + str(epoch) + '&')
 
 def agent(agent_id, net_params_queue, exp_queue):
     env = NetworkEnv(agent_id)

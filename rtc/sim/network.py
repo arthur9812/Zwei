@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 import os
 import time
-os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 import tflearn
 
 FEATURE_NUM = 64

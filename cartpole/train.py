@@ -7,7 +7,7 @@ import tensorflow as tf
 import toynetwork as network
 import gym
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 S_DIM = [1, 4]

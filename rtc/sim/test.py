@@ -5,16 +5,17 @@ import sys
 from test_env import NetworkEnv
 from matplotlib import pyplot as plt
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 S_DIM = [6, 8]
 A_DIM = 7
 ACTOR_LR_RATE = 0.0001
 CRITIC_LR_RATE = 0.001
 RAND_RANGE = 1000
-# NN_MODEL = './models/nn_model_eps_len_300.ckpt'
-NN_MODEL = sys.argv[1]
-EP = sys.argv[2]
+NN_MODEL = './results/nn_model_ep_150.ckpt'
+EP = "0"
+# NN_MODEL = sys.argv[1]
+# EP = sys.argv[2]
 TEST_TRACES = './test_traces/'
 
 
@@ -31,6 +32,7 @@ def main():
         saver.restore(sess, NN_MODEL)
         rew_list = []
         for _file in os.listdir(TEST_TRACES):
+            print(_file)
             env = NetworkEnv(TEST_TRACES + _file)
             obs = env.reset()
             _f = open('test_results/' + _file + '.csv', 'w')
@@ -41,7 +43,7 @@ def main():
                 a = np.argmax(action_prob)
                 # action_cumsum = np.cumsum(action_prob)
                 # a = (action_cumsum > np.random.randint(
-                   1, RAND_RANGE) / float(RAND_RANGE)).argmax()
+                #    1, RAND_RANGE) / float(RAND_RANGE)).argmax()
                 obs, rew, done, _info = env.step(a)
                 rew_list.append(rew)
                 if done:

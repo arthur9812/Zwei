@@ -9,7 +9,7 @@ import tensorflow as tf
 import rules
 import itertools
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
 
 S_DIM = [6, 8]
@@ -28,7 +28,7 @@ TRAIN_TRACES = './cooked_traces/'
 TEST_LOG_FOLDER = './test_results/'
 LOG_FILE = './results/log'
 BATCH_SIZE = 128
-BATTLE_ROUND = 5
+BATTLE_ROUND = 5 #  论文Fig.4中的n
 
 # create result directory
 if not os.path.exists(SUMMARY_DIR):
@@ -90,10 +90,10 @@ def agent(agent_id, net_params_queue, exp_queue):
         actor_net_params = net_params_queue.get()
         actor.set_network_params(actor_net_params)
         # initial battle round
-        round = list(itertools.combinations(range(BATTLE_ROUND), 2))
+        round = list(itertools.combinations(range(BATTLE_ROUND), 2)) #  返回所有排列组合
 
         time_stamp = 0
-        obs = env.reset()
+        obs = env.reset() # observations
         # env.reset()
         for epoch in range(TRAIN_EPOCH):
             env.reset_trace()
@@ -161,6 +161,11 @@ def main():
     # inter-process communication queues
     net_params_queues = []
     exp_queues = []
+
+    ### For debug
+    # agent(0,0,0)
+    ###
+
     for i in range(NUM_AGENTS):
         net_params_queues.append(mp.Queue(1))
         exp_queues.append(mp.Queue(1))
@@ -171,7 +176,7 @@ def main():
                              args=(net_params_queues, exp_queues))
     coordinator.start()
 
-    agents = []
+
     for i in range(NUM_AGENTS):
         agents.append(mp.Process(target=agent,
                                  args=(i,
